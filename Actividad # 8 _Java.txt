@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 
 class Card {
     private String palo;
@@ -63,7 +64,7 @@ class Deck {
         Card card = cards.remove(0);
         System.out.println("Primera carta del deck:");
         System.out.println(card);
-        System.out.println("* Quedan " + cards.size() + " cartas en deck");
+        System.out.println(" ----- Quedan " + cards.size() + " cartas en deck ----- ");
     }
 
     public void pick() {
@@ -71,7 +72,7 @@ class Deck {
         Card card = cards.remove(randomIndex);
         System.out.println("Carta al azar del pick:");
         System.out.println(card);
-        System.out.println(" * Quedan " + cards.size() + " cartas en deck");
+        System.out.println(" ----- Quedan " + cards.size() + " cartas en deck----- ");
     }
 
     public void hand() {
@@ -80,23 +81,52 @@ class Deck {
             Card card = cards.remove(0);
             System.out.println(card);
         }
-        System.out.println(" * Quedan " + cards.size() + " cartas en deck");
+        System.out.println(" ----- Quedan " + cards.size() + " cartas en deck ----- ");
     }
 }
 
 public class Main {
     public static void main(String[] args) {
         Deck deck = new Deck();
+        Scanner scanner = new Scanner(System.in);
 
-        deck.shuffle();
-        System.out.println();
+        System.out.println("------ Bienvenido a la Baraja de Poker! ----- ");
+        int option;
+        do {
+            option = showMenu(scanner);
+            switch (option) {
+                case 1:
+                    deck.shuffle();
+                    break;
+                case 2:
+                    deck.head();
+                    break;
+                case 3:
+                    deck.pick();
+                    break;
+                case 4:
+                    deck.hand();
+                    break;
+                case 0:
+                    System.out.println("---- A seleciona la opcion  de salir del programa. ¡Buen dia,vuela pronto! ------ ");
+                    break;
+                default:
+                    System.out.println("----- La opcion selecionada no es valida. Por favor ingrese una opcion valida del menu.----- ");
+            }
+        } while (option != 0);
 
-        deck.head();
-        System.out.println();
+        scanner.close();
+    }
 
-        deck.pick();
-        System.out.println();
+    public static int showMenu(Scanner scanner) {
 
-        deck.hand();
+        System.out.println(" Menu del juego: ");
+        System.out.println("1- Mezclar el deck.");
+        System.out.println("2- Sacar una carta.");
+        System.out.println("3- Sacar una carta al azar.");
+        System.out.println("4- Generar una mano de 5 cartas.");
+        System.out.println("0  Salir.");
+        System.out.println(" ----- Por favor, seleccione una opción del menu. ----- ");
+        return scanner.nextInt();
     }
 }
