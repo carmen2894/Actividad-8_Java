@@ -60,30 +60,37 @@ class Deck {
         System.out.println( " ----- Se mezcló el Deck --------");
     }
 
-    public void head() {
+    public void head() throws Exception {
+        if (cards.isEmpty()) {
+            throw new Exception(" ----- Se han agotado las cartas ----- ");
+        }
         Card card = cards.remove(0);
-        System.out.println("Primera carta del deck:");
         System.out.println(card);
-        System.out.println(" ----- Quedan " + cards.size() + " cartas en deck ----- ");
+        System.out.println("Quedan " + cards.size() + " cartas en deck");
     }
-
-    public void pick() {
+    public void pick() throws Exception {
+        if (cards.isEmpty()) {
+            throw new Exception("----- Se han agotado las cartas ----- ");
+        }
         int randomIndex = (int) (Math.random() * cards.size());
         Card card = cards.remove(randomIndex);
-        System.out.println("Carta al azar del pick:");
         System.out.println(card);
-        System.out.println(" ----- Quedan " + cards.size() + " cartas en deck----- ");
+        System.out.println("Quedan " + cards.size() + " cartas en deck");
     }
 
-    public void hand() {
-        System.out.println("Cinco cartas del deck:");
+    public void hand() throws Exception {
+        if (cards.size() < 5) {
+            throw new Exception("----- No hay suficientes cartas en el deck para tomar una mano.----- ");
+        }
+
         for (int i = 0; i < 5; i++) {
             Card card = cards.remove(0);
             System.out.println(card);
         }
-        System.out.println(" ----- Quedan " + cards.size() + " cartas en deck ----- ");
+        System.out.println("Quedan " + cards.size() + " cartas en deck ");
     }
 }
+
 
 public class Main {
     public static void main(String[] args) {
@@ -91,34 +98,39 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("------ Bienvenido a la Baraja de Poker! ----- ");
-        int option;
+        int option=-1;
+
         do {
-            option = showMenu(scanner);
-            switch (option) {
-                case 1:
-                    deck.shuffle();
-                    break;
-                case 2:
-                    deck.head();
-                    break;
-                case 3:
-                    deck.pick();
-                    break;
-                case 4:
-                    deck.hand();
-                    break;
-                case 0:
-                    System.out.println("---- A seleciona la opcion  de salir del programa. ¡Buen dia,vuela pronto! ------ ");
-                    break;
-                default:
-                    System.out.println("----- La opcion selecionada no es valida. Por favor ingrese una opcion valida del menu.----- ");
+            try {
+                option = showMenu(scanner);
+                switch (option) {
+                    case 1:
+                        deck.shuffle();
+                        break;
+                    case 2:
+                        deck.head();
+                        break;
+                    case 3:
+                        deck.pick();
+                        break;
+                    case 4:
+                        deck.hand();
+                        break;
+                    case 0:
+                        System.out.println("----- Saliendo del programa. ¡Hasta luego! ----- ");
+                        break;
+                    default:
+                        throw new Exception("----- Opción no válida. -----");
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
         } while (option != 0);
 
         scanner.close();
     }
 
-    public static int showMenu(Scanner scanner) {
+    public static int showMenu(Scanner scanner)   throws Exception  {
 
         System.out.println(" Menu del juego: ");
         System.out.println("1- Mezclar el deck.");
@@ -127,6 +139,12 @@ public class Main {
         System.out.println("4- Generar una mano de 5 cartas.");
         System.out.println("0  Salir.");
         System.out.println(" ----- Por favor, seleccione una opción del menu. ----- ");
-        return scanner.nextInt();
+
+        int option = scanner.nextInt();
+        if (option < 0 || option > 4) {
+            throw new Exception("----- Opción no válida. ----- ");
+        }
+        return option;
     }
 }
+
